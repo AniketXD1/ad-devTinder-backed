@@ -16,26 +16,36 @@ const app = express();
 // });
 
 // this will only handel GET  call  to /user
-app.get("/user", (req, res) => {
+// app.get("/user", (req, res) => {
+//   res.send({ firstName: "Aniket", lastName: "Deshapnde" });
+// });
+
+// app.post("/user", (req, res) => {
+//   // assume user giving input this input  Saving to data DB
+//   res.send("Data successfully saved to the database");
+// });
+
+// app.delete("/user", (req, res) => {
+//   res.send("delete sucessfully");
+// });
+
+// app.patch("/user", (req, res) => {
+//   res.send("patch sucessfully");
+// });
+
+// // This will match  all the HTTP method API call to /test
+// app.use("/test", (req, res) => {
+//   res.send("Hello from the server");
+// });
+
+// app.get("/user", (req, res) => {
+//   console.log(req.query);
+//   res.send({ firstName: "Aniket", lastName: "Deshapnde" });
+// });
+
+app.get("/user/:userId/:name/:password", (req, res) => {
+  console.log(req.params);
   res.send({ firstName: "Aniket", lastName: "Deshapnde" });
-});
-
-app.post("/user", (req, res) => {
-  // assume user giving input this input  Saving to data DB
-  res.send("Data successfully saved to the database");
-});
-
-app.delete("/user", (req, res) => {
-  res.send("delete sucessfully");
-});
-
-app.patch("/user", (req, res) => {
-  res.send("patch sucessfully");
-});
-
-// This will match  all the HTTP method API call to /test
-app.use("/test", (req, res) => {
-  res.send("Hello from the server");
 });
 
 app.listen(7777, () => {
