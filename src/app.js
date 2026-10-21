@@ -48,43 +48,134 @@
 
 //!--------------------------------------------------------------------------------------
 
+// const express = require("express");
+
+// const app = express();
+
+// app.get(
+//   "/user",
+//   (req, res, next) => {
+//     //res.send("route handel 1");
+
+//     console.log("handeling the route user");
+//     //res.send("Response...");
+//     next();
+//   },
+//   (req, res, next) => {
+//     // route  handel 2
+//     console.log("handeling the route user 2");
+//     //res.send("2nd Response...");
+//     next();
+//   },
+//   (req, res, next) => {
+//     // route  handel 3
+//     console.log("handeling the route user 3");
+//     //res.send("3rd Response...");
+//     next();
+//   },
+//   (req, res, next) => {
+//     // route  handel 4
+//     console.log("handeling the route user 4");
+//     //res.send("4th Response...");
+//     next();
+//   },
+//   (req, res, next) => {
+//     // route  handel 4
+//     console.log("handeling the route user 5");
+//     res.send("5th Response...");
+//   },
+// );
+
+// app.listen(7777, () => {
+//   console.log("Server is Successfully listening on port 7777");
+// });
+
+//! another way
+
+// const express = require("express");
+
+// const app = express();
+
+// app.get("/user", (req, res, next) => {
+//   console.log("handeling route the user2");
+//   res.send("2nd route handel ");
+// });
+
+// app.get("/user", (req, res, next) => {
+//   console.log("handeling route the user");
+//   next();
+// });
+
+// app.listen(7777, () => {
+//   console.log("Server is Successfully listening on port 7777");
+// });
+
+//!-------------------------------------
+//!middel ware example
+
+// GET /user => it checks all the app.xxx("matching route") functions
+//! GET /user => middleware chain => request hander
+// const express = require("express");
+
+// const app = express();
+
+//app.use("/", (req, res, next) => {
+//<--- this is middle ware
+// res.send("handeling / route");
+//   next();
+// });
+
+// app.get(
+//   "/user",
+//   (req, res, next) => {
+//     console.log("get user route ");
+//     next();
+//   },
+//   (req, res, next) => {
+//     res.send("1st route handel ");
+//   },
+//   (req, res, next) => {
+//     res.send("2nd route handel ");
+//   },
+// );
+
+// app.listen(7777, () => {
+//   console.log("Server is Successfully listening on port 7777");
+// });
+
+//-------------------------------------------
+//! why do  we need  middleware
+
 const express = require("express");
 
 const app = express();
 
-app.get(
-  "/user",
-  (req, res, next) => {
-    //res.send("route handel 1");
+const { adminAuth, userAuth } = require("./middlewares/auth");
 
-    console.log("handeling the route user");
-    //res.send("Response...");
-    next();
-  },
-  (req, res, next) => {
-    // route  handel 2
-    console.log("handeling the route user 2");
-    //res.send("2nd Response...");
-    next();
-  },
-  (req, res, next) => {
-    // route  handel 3
-    console.log("handeling the route user 3");
-    //res.send("3rd Response...");
-    next();
-  },
-  (req, res, next) => {
-    // route  handel 4
-    console.log("handeling the route user 4");
-    //res.send("4th Response...");
-    next();
-  },
-  (req, res, next) => {
-    // route  handel 4
-    console.log("handeling the route user 5");
-    res.send("5th Response...");
-  },
-);
+//! handel auth middleware for all request GET, POST, DELETE, {so that why we want app.use for middleware get all request }
+app.use("/admin", adminAuth);
+
+// this for multile user auth
+//app.use("/user", userAuth);
+
+// we can do thta one user auth
+
+app.post("/user/login", (req, res) => {
+  res.send("User logged in  successfully ");
+});
+
+app.get("/user/data", userAuth, (req, res) => {
+  res.send("user data send");
+});
+app.get("/admin/getAllData", (req, res) => {
+  // logic of fetching all data
+
+  res.send("All Data Sent");
+});
+
+app.get("/admin/deleteUser", (req, res) => {
+  res.send("Deleted a user");
+});
 
 app.listen(7777, () => {
   console.log("Server is Successfully listening on port 7777");
