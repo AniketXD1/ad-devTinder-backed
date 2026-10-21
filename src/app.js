@@ -146,37 +146,70 @@
 //-------------------------------------------
 //! why do  we need  middleware
 
-const express = require("express");
+// const express = require("express");
 
-const app = express();
+// const app = express();
 
-const { adminAuth, userAuth } = require("./middlewares/auth");
+// const { adminAuth, userAuth } = require("./middlewares/auth");
 
 //! handel auth middleware for all request GET, POST, DELETE, {so that why we want app.use for middleware get all request }
-app.use("/admin", adminAuth);
+//app.use("/admin", adminAuth);
 
 // this for multile user auth
 //app.use("/user", userAuth);
 
 // we can do thta one user auth
 
-app.post("/user/login", (req, res) => {
-  res.send("User logged in  successfully ");
+// app.post("/user/login", (req, res) => {
+//   res.send("User logged in  successfully ");
+// });
+
+// app.get("/user/data", userAuth, (req, res) => {
+//   res.send("user data send");
+// });
+// app.get("/admin/getAllData", (req, res) => {
+//    logic of fetching all data
+
+//   res.send("All Data Sent");
+// });
+
+// app.get("/admin/deleteUser", (req, res) => {
+//   res.send("Deleted a user");
+// });
+
+// app.listen(7777, () => {
+//   console.log("Server is Successfully listening on port 7777");
+// });
+
+//------------------------------------------------------------
+//! Error Handing
+const express = require("express");
+
+const app = express();
+
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(500).send("something went wrong");
+  }
 });
 
-app.get("/user/data", userAuth, (req, res) => {
+app.get("/getUserData", (req, res) => {
+  // what we do over here ---> logic DB  call and get user data
+  // supose some error in the code --> here we see how to handel error
+  // just an exmaple
+
+  // try {
+  throw new Error("fcghbjnkm");
   res.send("user data send");
+  // } catch (err) {
+  //   res.status(500).send("some error contact support team ");
+  // }
 });
-app.get("/admin/getAllData", (req, res) => {
-  // logic of fetching all data
-
-  res.send("All Data Sent");
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(500).send("something went wrong");
+  }
 });
-
-app.get("/admin/deleteUser", (req, res) => {
-  res.send("Deleted a user");
-});
-
 app.listen(7777, () => {
   console.log("Server is Successfully listening on port 7777");
 });
