@@ -183,33 +183,83 @@
 
 //------------------------------------------------------------
 //! Error Handing
+// const express = require("express");
+
+// const app = express();
+
+// app.use("/", (err, req, res, next) => {
+//   if (err) {
+//     res.status(500).send("something went wrong");
+//   }
+// });
+
+// app.get("/getUserData", (req, res) => {
+//   // what we do over here ---> logic DB  call and get user data
+//   // supose some error in the code --> here we see how to handel error
+//   // just an exmaple
+
+//   // try {
+//   throw new Error("fcghbjnkm");
+//   res.send("user data send");
+//   // } catch (err) {
+//   //   res.status(500).send("some error contact support team ");
+//   // }
+// });
+// app.use("/", (err, req, res, next) => {
+//   if (err) {
+//     res.status(500).send("something went wrong");
+//   }
+// });
+// app.listen(7777, () => {
+//   console.log("Server is Successfully listening on port 7777");
+// });
+
+//---------------------------------------------------------------------------------
+
+//!
+
 const express = require("express");
+const connectDB = require("./config/database");
 
 const app = express();
+const User = require("./models/user");
 
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    res.status(500).send("something went wrong");
+app.post("/signup", async (req, res) => {
+  // dummy user data
+  //! this one way do it
+  // const userObj = {
+  //   firstName: "Aniket",
+  //   lastName: "Deshpande",
+  //   emailId: "aniket@gmail.com",
+  //   password: "aniket@123",
+  // };
+
+  // creating  a new instance of  the User model
+  //const user = new User(userObj);
+
+  //! another way
+  const user = new User({
+    firstName: "sachin",
+    lastName: "Tendulkar",
+    emailId: "sachin@gmail.com",
+    password: "sachin@123",
+  });
+
+  try {
+    await user.save();
+    res.send("user added successfully");
+  } catch (err) {
+    res.status(400).send("Error saving the user:", +err.message);
   }
 });
 
-app.get("/getUserData", (req, res) => {
-  // what we do over here ---> logic DB  call and get user data
-  // supose some error in the code --> here we see how to handel error
-  // just an exmaple
-
-  // try {
-  throw new Error("fcghbjnkm");
-  res.send("user data send");
-  // } catch (err) {
-  //   res.status(500).send("some error contact support team ");
-  // }
-});
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    res.status(500).send("something went wrong");
-  }
-});
-app.listen(7777, () => {
-  console.log("Server is Successfully listening on port 7777");
-});
+connectDB()
+  .then(() => {
+    console.log("DataBase Connection established");
+    app.listen(7777, () => {
+      console.log("Server is Successfully listening on port 7777");
+    });
+  })
+  .catch((err) => {
+    console.error("Database can not be established");
+  });
